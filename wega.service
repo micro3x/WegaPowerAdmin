@@ -1,0 +1,15 @@
+[Unit]
+Description=Wega
+
+[Service]
+ExecStart=/usr/bin/node /wega/start.js
+Restart=always
+User=micro3x
+Group=dialout
+Environment=PATH=/usr/bin:/usr/local/bin
+Environment=NODE_ENV=production
+WorkingDirectory=/wega
+
+[Install]
+WantedBy=multi-user.target
+

@@ -1,0 +1,26 @@
+===============
+Install Wega Service
+===============
+
+install Nodejs with npm
+install myslq
+
+=== DataBase ===
+1. import schema from wegaDB in mysql
+2. create user 'wega@localhost' with password 'wega'
+3. give full permissions to 'wega' user for 'wegaDB'
+
+=== App Install ===
+4. Copy .js files to /wega/
+5. cd /wega/
+6. npm install
+6.1 - if serial port fails -> sudo npm install serialport --unsafe-perm --build-from-source
+
+=== Deamon ===
+7. copy wega.service to /etc/systemd/system/
+7.1 change user and group in .service file to valid users on the system
+8. sudo systemctl daemon-reload
+9. sudo systemctl enable wega
+
+Reboot!
+
