@@ -5,12 +5,32 @@ var DataContext = function (dbSettings) {
 
     var connection = mysql.createConnection(dbSettings);
 
-    saveData = function (data) {
-       connection.query('INSERT INTO readingsData SET ?', data, function (error, results, fields) {
+    var saveData = function (data) {
+        connection.query('INSERT INTO readingsData SET ?', data, function (error, results, fields) {
             if (error) {
                 throw error;
             }
         });
+    }
+
+    var getNotTransmitedData = function () {
+        return new Promise(function (resolve, reject) {
+            connection.query("SELECT * FROM readingsData WHERE transmited = 0", function (error, data, fields) {
+                if (error) {
+                    return reject(error);
+                }
+                resolve(data);
+            });
+        })
+    }
+
+    var markAsTransmited = function (id) {
+        var queryStr = "UPDATE readingsData SET transmited = 1 WHERE id = " + id;
+        connection.query(queryStr, function (error, data) {
+            if (error) {
+                console.log(error);
+            }
+        })
     }
 
 
@@ -31,7 +51,9 @@ var DataContext = function (dbSettings) {
     // }
 
     return {
-        saveData: saveData
+        saveData: saveData,
+        getNotTransmitedData: getNotTransmitedData,
+        markAsTransmited: markAsTransmited
     }
 }
 
