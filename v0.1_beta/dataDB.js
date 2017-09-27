@@ -24,8 +24,14 @@ var DataContext = function (dbSettings) {
         })
     }
 
-    var markAsTransmited = function (id) {
-        var queryStr = "UPDATE readingsData SET transmited = 1 WHERE id = " + id;
+    var markAsTransmited = function (transmitedData) {
+        var transmitedIds = [];
+        for (var idx in transmitedData) {
+            if (transmitedData[idx]['success']) {
+                transmitedIds.push(dataChunk[idx]['id']);
+            }
+        }
+        var queryStr = "UPDATE readingsData SET transmited = 1 WHERE id IN (" + transmitedIds.join(", ") + ");";
         connection.query(queryStr, function (error, data) {
             if (error) {
                 console.log(error);
@@ -33,27 +39,29 @@ var DataContext = function (dbSettings) {
         })
     }
 
+    var getSerialPort = function () {
+        return getSettingsValue('serialPort');
+    }
 
-
-    // function consolidationCheck() {
-    //     var isConsolidationTime = false;
-    //     connection.query('SELECT MIN(`utc_time`) as mini, MAX(`utc_time`) as maxi FROM wegaDB.readingsData', function (error, results, fields) {
-    //         if (error) {
-    //             throw error;
-    //         }
-    //         console.log(results[0])
-    //         console.log((results[0].maxi - results[0].mini) > 59)
-    //         if ((results[0].maxi - results[0].mini) > 59) {
-    //             isConsolidationTime = true;
-    //         }
-    //     });
-    //     return isConsolidationTime;
-    // }
+    function getSettingsValue(settingKey) {
+        if (settingKey) {
+            return new Promise(function (resolve, reject) {
+                connection.query("SELECT settingValue FROM settings WHERE settingKey = " + settingKey, function (error, data, fields) {
+                    if (error) {
+                        return reject(error);
+                    }
+                    resolve(data[0]);
+                });
+            })
+        }
+        throw { message: "Invalid input" };
+    }
 
     return {
         saveData: saveData,
         getNotTransmitedData: getNotTransmitedData,
-        markAsTransmited: markAsTransmited
+        markAsTransmited: markAsTransmited,
+        getSerialPort: getSerialPort,
     }
 }
 

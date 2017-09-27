@@ -1,5 +1,17 @@
 var bitwise = require('bitwise');
-var crc = require('crc')
+var crc = require('crc');
+
+function PACKAGE () {
+    function State(obj) {
+        this.head = obj.head;
+        this.func = obj.func;
+        this.address = obj.address;
+        this.len = obj.len;
+        this.l = 1;
+        this.batv, this.out1, this.solv, this.out2, this.windv, this.mppt, this.windA, this.outA, this.rpm, this.solA, this.dumpA, this.batCapacity, this.batState, this.dayOrNight, this.nc, this.utc_time = 0;
+    }
+}
+
 
 var transformData = function (dataBuffer) {
     if (!isCrcOK(dataBuffer)) {
@@ -9,17 +21,15 @@ var transformData = function (dataBuffer) {
 
     //todo: in this scenario I handle only state packets...
     // this func should handle all kinds of pakets.
-    var output = {
-        head: 0, func: 0, address: 0, len: 0, batv: 0, out1: 0, solv: 0, out2: 0, windv: 0, mppt: 0,
-        windA: 0, outA: 0, rpm: 0, solA: 0, dumpA: 0, batCapacity: 0, batState: 0, dayOrNight: 0, nc: 0,
-        utc_time: 0
-    }
+    var output = { head: 0, func: 0, address: 0, len: 0 };
 
     var first32 = dataBuffer.slice(0, 4).readUInt32LE(0);
     output.head = first32 & 255;
     output.func = (first32 >> 8) & 255;
     output.address = (first32 >> 16) & 255;
     output.len = first32 >> 24;
+
+    output = new PACKAGE(output);
 
     var second16 = get14by2(dataBuffer.slice(4, 6));
     output.batv = second16.r1;
@@ -70,30 +80,6 @@ function isCrcOK(buffer) {
     var crcRead = buffer.slice((buffer.length - 2), buffer.length).readUInt16LE(0);
     return (crcCalc === crcRead);
 }
-
-// function avgReadings(dataArray) {
-//     var counter = 0;
-//     var result = {};
-
-//     dataArray.forEach(function (dataElement) {
-//         for (var key in dataElement) {
-//             if (dataElement.hasOwnProperty(key)) {
-//                 if (!result[key]) {
-//                     result[key] = 0;
-//                 }
-//                 result[key] += dataElement[key];
-//             }
-//         }
-//         counter += 1;
-//     }, this);
-
-//     for (var resultKey in result) {
-//         if (result.hasOwnProperty(resultKey)) {
-//             result[resultKey] = Math.floor(result[resultKey] / counter);
-//         }
-//     }
-//     return result;
-// }
 
 var DataBuffer = function (interval = 60) {
     var container = [];
@@ -173,7 +159,15 @@ var DataBuffer = function (interval = 60) {
 
 }
 
+var getDataChunks = function (fullData, chunkSize) {
+    if (fullData.length > chunkSize) {
+        return fullData.slice((chunkSize * -1));
+    }
+    return fullData;
+}
+
 module.exports = {
     transformData: transformData,
+    getDataChunks: getDataChunks,
     DataBuffer: DataBuffer
 }
