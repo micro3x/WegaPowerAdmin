@@ -5,7 +5,7 @@ const controllerCommands = {
     getWindSettings: Buffer.from([165, 3, 10, 3, 148, 73])// Todo: Fix this command
 };
 
-var SerialCommonicator = function (portname, baudRate = 19200) {
+var SerialCommunicator = function (portname, baudRate = 19200) {
     var port = new Serial(portname, {
         baudRate: baudRate,
         platformOptions : {
@@ -33,5 +33,5 @@ var SerialCommonicator = function (portname, baudRate = 19200) {
 
 }
 
-module.exports = { SerialCommonicator: SerialCommonicator };
+module.exports = { SerialCommunicator: SerialCommunicator };
 

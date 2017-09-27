@@ -13,7 +13,7 @@ var TRANSMITINTERVAL = appSettings['const']['transmitInterval'];
 var TRANSMITCHUNKSIZE = appSettings['const']['chunkSize'];
 
 var db = dbContext.DataContext(appSettings['db']);
-var ser = serialCom.SerialCommonicator(appSettings['serial']['port']);
+var ser = serialCom.SerialCommunicator(appSettings['serial']['port']);
 var server = serverCom.ServerCommunicator(appSettings['server']);
 
 var dataBuffer = new dataHandler.DataBuffer(CONSOLIDATEINTERVAL)
@@ -41,12 +41,12 @@ function commitData() {
 }
 
 function transmitData() {
-    db.getNotTransmitedData().then(function (data) {
+    db.getNotTransmittedData().then(function (data) {
         if (data.length > 0) {
             var dataChunk = dataHandler.getDataChunk(data, TRANSMITCHUNKSIZE);
             server.transmit(dataChunk).then(function (response) {
                 if (response.response['statusCode'] === 200) {
-                    db.markAsTransmited(response.data);
+                    db.markAsTransmitted(response.data);
                 }
             })
         }
