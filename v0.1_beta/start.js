@@ -5,7 +5,7 @@ var dataHandler = require('./dataHandler');
 var serverCom = require('./serverCom');
 var dbContext = require('./dataDB');
 
-var appSettings = JSON.parse(fs.readFileSync("dbSettings.json",'utf8'));
+var appSettings = JSON.parse(fs.readFileSync("dbSettings.json", 'utf8'));
 
 var READINTERVAL = appSettings['const']['readInterval'];
 var CONSOLIDATEINTERVAL = appSettings['const']['consolidateInterval'];
@@ -21,14 +21,19 @@ var dataBuffer = new dataHandler.DataBuffer(CONSOLIDATEINTERVAL)
 ser.port.on("data", function (data) {
     var dataReceived = dataHandler.transformData(data);
 
-    if (dataReceived) {
-        //ToDo: handle data Check if it is stateData or Not
-        switch (dataReceived.func) {
-            case 4: // State Packet
+    if (dataReceived && dataReceived.func == 4) {
+        switch (dataReceived.address) { // check package type
+            case 10: // State Packet
                 dataBuffer.add(dataReceived);
-                // console.log('dataRead');
                 break;
-
+            case 11: // WindSettings
+                break;
+            case 12: //SolarSettings
+                break;
+            case 13: // OutputSettings
+                break;
+            case 14: // BatterySettings
+                break;
             default:
                 break;
         }

@@ -2,14 +2,18 @@ var Serial = require('serialport')
 
 const controllerCommands = {
     getData: Buffer.from([165, 3, 10, 3, 148, 73]),
-    getWindSettings: Buffer.from([165, 3, 10, 3, 148, 73])// Todo: Fix this command
+    getWindSettings: Buffer.from([165, 3, 11, 3, 149, 217]),
+    getSolarSettings: Buffer.from([165, 3, 12, 3, 151, 233]),
+    getOutputSettings: Buffer.from([165, 3, 13, 3, 150, 121]),
+    getBatterySettings: Buffer.from([165, 3, 14, 3, 150, 137])
+
 };
 
 var SerialCommunicator = function (portname, baudRate = 19200) {
     var port = new Serial(portname, {
         baudRate: baudRate,
-        platformOptions : {
-            vmin : 1,
+        platformOptions: {
+            vmin: 1,
             vtime: 0
         }
     })
@@ -26,9 +30,19 @@ var SerialCommunicator = function (portname, baudRate = 19200) {
         }
     }
 
+    function requestConfig() {
+        if (port.isOpen) {
+            port.write(controllerCommands.getWindSettings);
+            setTimeout(port.write(controllerCommands.getSolarSettings), 100);
+            setTimeout(port.write(controllerCommands.getOutputSettings), 100);
+            setTimeout(port.write(controllerCommands.getBatterySettings), 100);
+        }
+    }
+
     return {
         port: port,
-        requestData: requestData
+        requestData: requestData,
+        requestConfig: requestConfig
     }
 
 }
