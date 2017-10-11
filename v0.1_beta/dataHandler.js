@@ -1,61 +1,6 @@
 var bitwise = require('bitwise');
 var crc = require('crc');
-
-function Package(obj) {
-    this.head = 0;
-    this.func = obj.func;
-    this.address = obj.address;
-    this.len = obj.len;
-}
-
-function StatePack(obj) {
-    Package.call(this, obj);
-    this.batv, this.out1, this.solv, this.out2, this.windv, this.mppt, this.windA, this.outA, this.rpm, this.solA, this.dumpA, this.batCapacity, this.batState, this.dayOrNight, this.nc, this.utc_time = 0;
-}
-
-function WindSettings(obj) {
-    Package.call(this, obj);
-    this.wMaxV = 0;
-    this.wChargeManualEnable = 0;
-    this.wMaxA = 0;
-    this.wManualBrake = 0;
-    this.wMaxRpm = 0;
-    this.wMpptSwitch = 0;
-    this.wStartChargeV = 0;
-    this.wBrakeTime = 0;
-    this.wMagnetPoleDouble = 0;
-}
-
-function SolarSettings(obj) {
-    Package.call(this, obj);
-    this.onVol = 0;
-    this.offVol = 0;
-    this.manualChargeEnable = 0;
-}
-
-function OutputSettings(obj) {
-    Package.call(this, obj);
-    this.out1Mode = 0;
-    this.out1Enable = 0;
-    this.out1TimeDelayOn = 0;
-    this.out1TimeDelayOff = 0;
-    this.out2Mode = 0;
-    this.out2Enable = 0;
-    this.out2TimeDelayOn = 0;
-    this.out2TimeDelayOff = 0;
-}
-
-function BatterySettings(obj) {
-    Package.call(this, obj);
-    this.batCapacity,
-        this.lowVPoint,
-        this.lowVRecover,
-        this.overVPoint,
-        this.overVRecover,
-        this.floatChargePoint,
-        this.overVCloseOutput,
-        this.overVRecoverCloseOutput = 0;
-}
+var package = require('./models/package');
 
 
 var transformData = function (dataBuffer) {
@@ -92,7 +37,7 @@ var transformData = function (dataBuffer) {
 }
 
 function transformStatePacket(dataBuffer, packageHead) {
-    var output = new StatePack(packageHead);
+    var output = new package.StatePack(packageHead);
     var second16 = get14by2(dataBuffer.slice(4, 6));
     output.batv = second16.r1;
     output.out1 = second16.r2;
@@ -124,7 +69,7 @@ function transformStatePacket(dataBuffer, packageHead) {
 }
 
 function transformWindSettings(dataBuffer, packageHead) {
-    var output = new WindSettings(packageHead);
+    var output = new package.WindSettings(packageHead);
 
     var second16 = get10by1(dataBuffer.slice(4, 6));
     output.wMaxV = second16.r1;
@@ -148,7 +93,7 @@ function transformWindSettings(dataBuffer, packageHead) {
 }
 
 function transformSolarSettings(dataBuffer, packageHead) {
-    var output = new SolarSettings(packageHead);
+    var output = new package.SolarSettings(packageHead);
     output.onVol = dataBuffer.slice(4, 5).readUInt16LE(0);
     output.offVol = dataBuffer.slice(5, 6).readUInt16LE(0);
     output.manualChargeEnable = dataBuffer.slice(6, 7).readUInt16LE(0);
@@ -156,7 +101,7 @@ function transformSolarSettings(dataBuffer, packageHead) {
 }
 
 function transformOutputSettings(dataBuffer, packageHead) {
-    var output = new OutputSettings(packageHead);
+    var output = new package.OutputSettings(packageHead);
 
     var bitsOut1 = dataBuffer.slice(4, 6).readUInt16LE(0);
 
@@ -175,7 +120,7 @@ function transformOutputSettings(dataBuffer, packageHead) {
 }
 
 function transformBatterySettings(dataBuffer, packageHead) {
-    var output = new BatterySettings(packageHead);
+    var output = new package.BatterySettings(packageHead);
     output.batCapacity = dataBuffer.slice(4, 6).readUInt16LE(0);
     output.lowVPoint = dataBuffer.slice(6, 8).readUInt16LE(0);
     output.lowVRecover = dataBuffer.slice(8, 10).readUInt16LE(0);
@@ -209,84 +154,6 @@ function isCrcOK(buffer) {
     return (crcCalc === crcRead);
 }
 
-var DataBuffer = function (interval = 60) {
-    var container = [];
-
-    this.add = function (data) {
-        container.push(data);
-    }
-
-    this.flush = function () {
-        container = [];
-    }
-
-    this.clean = function () {
-        var maxTime = this.newestData();
-        var tempContainer = [];
-        container.forEach(function (element) {
-            if (element[utc_time] > (maxTime - interval)) {
-                tempContainer.push(element);
-            }
-        }, this);
-        container = tempContainer;
-    }
-
-    this.oldestData = function () {
-        if (container.length < 1) {
-            return false;
-        }
-        container.sort(function (a, b) {
-            return (a['utc_time'] - b['utc_time']);
-        });
-        return container[0];
-    }
-
-    this.newestData = function () {
-        if (container.length < 1) {
-            return false;
-        }
-        container.sort(function (a, b) {
-            return (a['utc_time'] - b['utc_time']);
-        });
-        return container[container.length - 1];
-    }
-
-    this.consolidate = function () {
-        var max = this.newestData();
-        var min = this.oldestData();
-        if ((max - min) > interval) {
-            this.clean();
-        }
-
-        var counter = 0;
-        var result = {};
-
-        container.forEach(function (dataElement) {
-            for (var key in dataElement) {
-                if (dataElement.hasOwnProperty(key)) {
-                    if (!result[key]) {
-                        result[key] = 0;
-                    }
-                    result[key] += dataElement[key];
-                }
-            }
-            counter += 1;
-        }, this);
-
-        for (var resultKey in result) {
-            if (result.hasOwnProperty(resultKey)) {
-                result[resultKey] = Math.floor(result[resultKey] / counter);
-            }
-        }
-        var now = new Date;
-        result['utc_time'] = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),
-            now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds()) / 1000;
-        this.flush();
-        return result;
-    }
-
-}
-
 var getDataChunks = function (fullData, chunkSize) {
     if (fullData.length > chunkSize) {
         return fullData.slice((chunkSize * -1));
@@ -296,6 +163,6 @@ var getDataChunks = function (fullData, chunkSize) {
 
 module.exports = {
     transformData: transformData,
-    getDataChunks: getDataChunks,
-    DataBuffer: DataBuffer
+    getDataChunks: getDataChunks
+    // DataBuffer: DataBuffer
 }

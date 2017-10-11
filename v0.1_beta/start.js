@@ -1,10 +1,14 @@
 
 var fs = require('fs');
+
+var readingsBuffer = require('./models/dataBuffer');
+
 var serialCom = require('./serialCom');
 var dataHandler = require('./dataHandler');
 var serverCom = require('./serverCom');
 var dbContext = require('./dataDB');
 var webServer = require('./webServer');
+
 
 var appSettings = JSON.parse(fs.readFileSync("appSettings.json", 'utf8'));
 
@@ -17,7 +21,7 @@ var db = dbContext.DataContext(appSettings['db']);
 var ser = serialCom.SerialCommunicator(appSettings['serial']['port']);
 var server = serverCom.ServerCommunicator(appSettings['server']);
 
-var dataBuffer = new dataHandler.DataBuffer(CONSOLIDATEINTERVAL);
+var dataBuffer = new readingsBuffer.DataBuffer(CONSOLIDATEINTERVAL);
 
 
 ser.port.on("data", function (data) {
@@ -29,12 +33,16 @@ ser.port.on("data", function (data) {
                 dataBuffer.add(dataReceived);
                 break;
             case 11: // WindSettings
+                db.saveCurrentSettings(dataReceived);
                 break;
             case 12: //SolarSettings
+                db.saveCurrentSettings(dataReceived);
                 break;
             case 13: // OutputSettings
+                db.saveCurrentSettings(dataReceived);
                 break;
             case 14: // BatterySettings
+                db.saveCurrentSettings(dataReceived);
                 break;
             default:
                 break;

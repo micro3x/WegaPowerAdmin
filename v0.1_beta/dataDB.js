@@ -7,7 +7,7 @@ var DataContext = function (dbSettings) {
     var saveData = function (data) {
         connection.query('INSERT INTO readingsData SET ?', data, function (error, results, fields) {
             if (error) {
-                throw error;
+                console.log(error);
             }
         });
     }
@@ -38,10 +38,15 @@ var DataContext = function (dbSettings) {
         })
     }
 
+    var saveCurrentSettings = function (settings) {
+
+    }
+
     return {
         saveData: saveData,
         getNotTransmittedData: getNotTransmittedData,
-        markAsTransmitted: markAsTransmitted
+        markAsTransmitted: markAsTransmitted,
+        saveCurrentSettings: saveCurrentSettings
     }
 }
 
