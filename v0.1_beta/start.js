@@ -4,8 +4,9 @@ var serialCom = require('./serialCom');
 var dataHandler = require('./dataHandler');
 var serverCom = require('./serverCom');
 var dbContext = require('./dataDB');
+var webServer = require('./webServer');
 
-var appSettings = JSON.parse(fs.readFileSync("dbSettings.json", 'utf8'));
+var appSettings = JSON.parse(fs.readFileSync("appSettings.json", 'utf8'));
 
 var READINTERVAL = appSettings['const']['readInterval'];
 var CONSOLIDATEINTERVAL = appSettings['const']['consolidateInterval'];
@@ -16,7 +17,8 @@ var db = dbContext.DataContext(appSettings['db']);
 var ser = serialCom.SerialCommunicator(appSettings['serial']['port']);
 var server = serverCom.ServerCommunicator(appSettings['server']);
 
-var dataBuffer = new dataHandler.DataBuffer(CONSOLIDATEINTERVAL)
+var dataBuffer = new dataHandler.DataBuffer(CONSOLIDATEINTERVAL);
+
 
 ser.port.on("data", function (data) {
     var dataReceived = dataHandler.transformData(data);
@@ -58,9 +60,11 @@ function transmitData() {
     })
 }
 
+// uncomment to run
 setInterval(ser.requestData, READINTERVAL * 1000)
 
 setInterval(commitData, CONSOLIDATEINTERVAL * 1000)
 
 setInterval(transmitData, TRANSMITINTERVAL * 1000)
-// transmitData();
+
+var frontEnd = webServer.Server();

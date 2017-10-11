@@ -1,0 +1,3 @@
+function alabala (){
+    alert('alabala');
+}
