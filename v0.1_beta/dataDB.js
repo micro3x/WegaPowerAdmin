@@ -39,14 +39,21 @@ var DataContext = function (dbSettings) {
     }
 
     var saveCurrentSettings = function (settings) {
+        //todo: 1. identify type of settings to be saved
+        
+        //todo: 2. Update Settings in DB
+    }
 
+    var getCurrentSettings = function () {
+        //todo: get settings from DB and return
     }
 
     return {
         saveData: saveData,
         getNotTransmittedData: getNotTransmittedData,
         markAsTransmitted: markAsTransmitted,
-        saveCurrentSettings: saveCurrentSettings
+        saveCurrentSettings: saveCurrentSettings,
+        getCurrentSettings: getCurrentSettings
     }
 }
 

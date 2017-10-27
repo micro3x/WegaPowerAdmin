@@ -1,3 +1,3 @@
-function alabala (){
-    alert('alabala');
-}
+
+
+

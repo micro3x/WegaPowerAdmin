@@ -1,13 +1,194 @@
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <link href="bootstrap.min.css" rel="stylesheet" />
+    <script src="jquery.min.js"></script>
+    <script src="bootstrap.min.js"></script>
 </head>
+
 <body>
     <script src="myJS.js"></script>
-    <h1>Wega Works</h1>
-    <input type="button" value="Press Me!" onclick="alabala()">
+    <div class="container">
+        <div>
+            <h1 class="text-center">Wega Works</h1>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title text-center">
+                    <a data-toggle="collapse" href="#collapse1">Application Settings</a>
+                </h3>
+            </div>
+            <div id="collapse1" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <form>
+                        <h3>Database Settings</h3>
+                        <hr>
+                        <table>
+                            <tr>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="dbserver">Server</label>
+                                        <br>
+                                        <input type="text" class="form-control" id="dbserver" placeholder="Server Name / IP">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="dbport">Port</label>
+                                        <br>
+                                        <input type="number" class="form-control float-right" id="dbport" placeholder="3306">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <div class="form-group">
+                                        <label for="dbname">DataBase</label>
+                                        <br>
+                                        <input type="text" class="form-control" id="dbname" placeholder="DataBase Name">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="dbuser">Username</label>
+                                        <br>
+                                        <input type="text" class="form-control" id="dbuser" placeholder="Username">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="dbpass">Password</label>
+                                        <br>
+                                        <input type="password" class="form-control" id="dbpass" placeholder="********">
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                    <form>
+                        <h3>REST API Configuration</h3>
+                        <hr>
+                        <table>
+                            <tr>
+                                <td colspan="2">
+                                    <div class="form-group">
+                                        <label for="remoteserver">Base URL</label>
+                                        <br>
+                                        <input type="text" class="form-control" id="remoteserver" placeholder="https://....">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <div class="form-group">
+                                        <label for="remoteappid">AppID</label>
+                                        <br>
+                                        <input type="text" class="form-control" id="remoteappid" placeholder="App ID {GUID}">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="remoteuser">Username</label>
+                                        <br>
+                                        <input type="text" class="form-control" id="remoteuser" placeholder="Username">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="remotepass">Password</label>
+                                        <br>
+                                        <input type="password" class="form-control" id="remotepass" placeholder="********">
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                    <form>
+                        <h3>Serial Port Configuration</h3>
+                        <hr>
+                        <table>
+                            <tr>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="serport">Port</label>
+                                        <br>
+                                        <input type="text" class="form-control" id="serport" placeholder="COM1, /dev/tty1">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="serboudrate">BoudRate</label>
+                                        <br>
+                                        <input type="number" class="form-control float-right" id="serboudrate" placeholder="19200">
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                    <form>
+                        <h3>Runtime Configuration</h3>
+                        <hr>
+                        <table>
+                            <tr>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="rcreadinterval">Data Read Interval (sec)</label>
+                                        <br>
+                                        <input type="number" class="form-control" id="rcreadinterval" placeholder="1">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="rcconsolidate">Consolidate Interval (sec)</label>
+                                        <br>
+                                        <input type="number" class="form-control float-right" id="rcconsolidate" placeholder="60">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="rctransmit">Transmit Interval (sec)</label>
+                                        <br>
+                                        <input type="number" class="form-control" id="rctransmit" placeholder="60">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="rcchunksize">Chunk Size Interval (sec)</label>
+                                        <br>
+                                        <input type="number" class="form-control float-right" id="rcchunksize" placeholder="10">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <div class="form-group">
+                                        <label for="rcUpdate">Check for new Configuration Interval (sec)</label>
+                                        <br>
+                                        <input type="number" class="form-control" id="rcUpdate" placeholder="300">
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+                <div class="panel-footer">
+                    <button class="btn btn-success" type="submit">Save &amp; Restart</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </body>
+
 </html>

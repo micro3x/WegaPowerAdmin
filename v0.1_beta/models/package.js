@@ -7,7 +7,11 @@ function Package(obj) {
 
 function StatePack(obj) {
     Package.call(this, obj);
-    this.batv, this.out1, this.solv, this.out2, this.windv, this.mppt, this.windA, this.outA, this.rpm, this.solA, this.dumpA, this.batCapacity, this.batState, this.dayOrNight, this.nc, this.utc_time = 0;
+    this.batv, this.out1, this.solv,
+        this.out2, this.windv, this.mppt,
+        this.windA, this.outA, this.rpm,
+        this.solA, this.dumpA, this.batCapacity,
+        this.batState, this.dayOrNight, this.nc, this.utc_time = 0;
 }
 
 function WindSettings(obj) {
@@ -61,5 +65,4 @@ module.exports = {
     OutputSettings: OutputSettings,
     BatterySettings: BatterySettings,
     StatePack: StatePack
-    // DataBuffer: DataBuffer
 }

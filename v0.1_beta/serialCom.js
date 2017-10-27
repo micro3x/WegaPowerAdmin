@@ -1,4 +1,5 @@
-var Serial = require('serialport')
+var Serial = require('serialport');
+var dataHandler = require('./dataHandler');
 
 const controllerCommands = {
     getData: Buffer.from([165, 3, 10, 3, 148, 73]),
@@ -37,6 +38,12 @@ var SerialCommunicator = function (portname, baudRate = 19200) {
             setTimeout(port.write(controllerCommands.getOutputSettings), 100);
             setTimeout(port.write(controllerCommands.getBatterySettings), 100);
         }
+    }
+
+    function applyConfig(newConfig) {
+        //todo: controller config split in different types
+        // use data handler to transform in Buffer
+        // transfer via serial port.
     }
 
     return {

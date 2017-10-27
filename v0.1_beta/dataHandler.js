@@ -161,6 +161,15 @@ var getDataChunks = function (fullData, chunkSize) {
     return fullData;
 }
 
+function encodeInBytes(packageForEncode) {
+    var byteArray = [];
+
+    //todo: transform package into bytes
+    // main challenge is to figure out what and how to transform.
+
+    return Buffer.from(byteArray);
+}
+
 module.exports = {
     transformData: transformData,
     getDataChunks: getDataChunks
