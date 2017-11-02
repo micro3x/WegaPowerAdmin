@@ -11,12 +11,86 @@
 </head>
 
 <body>
-    
+
     <div class="container">
         <div>
             <h1 class="text-center">Wega Works</h1>
         </div>
+        <!-- LiveView start -->
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title text-center">
+                    Live View
+                </h3>
+            </div>
+            <div class="panel-body">
+                <div id="status-icons" class="row">
 
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 col-md-3">
+                        <div class="thumbnail">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title text-center">
+                                        Output Voltage
+                                    </h4>
+                                </div>
+                                <div class="panel-body">
+                                    <h1 class="text-center" id="lv-windV"> 24 V </h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 col-md-3">
+                        <div class="thumbnail">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title text-center">
+                                        Output Ampers
+                                    </h4>
+                                </div>
+                                <div class="panel-body">
+                                    <h1 class="text-center" id="lv-windA"> 1.4 A </h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 col-md-3">
+                        <div class="thumbnail">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title text-center">
+                                        Bettery Voltage
+                                    </h4>
+                                </div>
+                                <div class="panel-body">
+                                    <h1 class="text-center" id="lv-batV"> 48.9 V </h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 col-md-3">
+                        <div class="thumbnail">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title text-center">
+                                        Rotation Speed
+                                    </h4>
+                                </div>
+                                <div class="panel-body">
+                                    <h1 class="text-center" id="lv-rpm"> 12 rpm </h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="live.js"></script>
+        <!-- LiveView end -->
+        <!-- Appconfig start -->
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title text-center">
@@ -188,6 +262,7 @@
             </div>
 
         </div>
+        <!-- Appconfig end -->
     </div>
     <script src="myJS.js"></script>
 </body>

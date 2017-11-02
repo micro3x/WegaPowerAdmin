@@ -5,7 +5,7 @@ var http = require("http"),
 port = 80,
   appConfig = require('./appConfig');
 
-var Server = function (serverPort = 80) {
+var Server = function (serverPort = 80, dataBuffer) {
 
   port = serverPort;
 
@@ -17,6 +17,14 @@ var Server = function (serverPort = 80) {
 
       if (apiPath.toLowerCase().startsWith("/appconfig")) {
         responseData = appConfig.getConfig();
+      }
+
+      if (apiPath.toLowerCase().startsWith("/live")) {
+        responseData = dataBuffer.getLastReading();
+        responseData = { windv: 241, rpm: 12, batv: 489 }; // line to be removed!!! for test purpuses only
+        var now = new Date;
+        responseData['systemTime'] = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),
+          now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds())
       }
 
       response.writeHead(200, { "Content-Type": "application/json" });
@@ -35,7 +43,7 @@ var Server = function (serverPort = 80) {
       request.on('end', function () {
         appConfig.saveConfig(JSON.parse(body));
       })
-      
+
       response.writeHead(200, { "Content-Type": "application/json" });
       response.write("SON.stringify(responseData)");
       response.end();

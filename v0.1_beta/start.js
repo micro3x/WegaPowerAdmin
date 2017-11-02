@@ -13,6 +13,7 @@ var webServer = require('./webServer');
 
 
 var appSettings = appConfig.getConfig();
+var dataBuffer = new readingsBuffer.DataBuffer(CONSOLIDATEINTERVAL);
 
 var READINTERVAL = appSettings['const']['readInterval'];
 var CONSOLIDATEINTERVAL = appSettings['const']['consolidateInterval'];
@@ -23,10 +24,7 @@ var CONFIGUPDATEINTERVAL = appSettings['const']['configUpdateInterval'];
 var db = dbContext.DataContext(appSettings['db']);
 var ser = serialCom.SerialCommunicator(appSettings['serial']['port']);
 var server = serverCom.ServerCommunicator(appSettings['server']);
-var frontEnd = webServer.Server();
-
-var dataBuffer = new readingsBuffer.DataBuffer(CONSOLIDATEINTERVAL);
-
+var frontEnd = webServer.Server(80, dataBuffer);
 
 ser.port.on("data", function (data) {
 
@@ -75,7 +73,7 @@ function transmitData() {
     })
 }
 
-function updateControllerConfig(){
+function updateControllerConfig() {
     //todo: 
     // 1. download new config from server
     // 2. get current config

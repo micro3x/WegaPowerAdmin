@@ -74,6 +74,13 @@ var DataBuffer = function (interval = 60) {
         return result;
     }
 
+    this.getLastReading = function () {
+        if (container.length > 0) {
+            return container[container.length - 1];
+        }
+        return {}
+    }
+
 }
 
 module.exports = {
