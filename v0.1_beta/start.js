@@ -87,9 +87,9 @@ function updateControllerConfig(){
 // uncomment to run
 setInterval(ser.requestData, READINTERVAL * 1000)
 
-setInterval(commitData, CONSOLIDATEINTERVAL * 1000)
+// setInterval(commitData, CONSOLIDATEINTERVAL * 1000)
 
-setInterval(transmitData, TRANSMITINTERVAL * 1000)
+// setInterval(transmitData, TRANSMITINTERVAL * 1000)
 
 setInterval(updateControllerConfig, CONFIGUPDATEINTERVAL * 1000)
 
