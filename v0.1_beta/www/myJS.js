@@ -4,6 +4,8 @@
 $.get("/api/appconfig", function (data) {
     $('#dbserver').val(data.db.host);
     $('#dbport').val(data.db.port | 3306);
+    $('#dbclean-transmited').val(data.db.cleanTransmited | 1);
+    $('#dbclean-non-transmited').val(data.db.cleanNonTransmited | 1);
     $('#dbname').val(data.db.database);
     $('#dbuser').val(data.db.user);
     $('#dbpass').val(data.db.password);
@@ -31,7 +33,9 @@ $('#saveRestartAppConfig').on('click', function () {
             port: $('#dbport').val(),
             database: $('#dbname').val(),
             user: $('#dbuser').val(),
-            password: $('#dbpass').val()
+            password: $('#dbpass').val(),
+            cleanTransmited: $('#dbclean-transmited').val(),
+            cleanNonTransmited: $('#dbclean-non-transmited').val()
         }, server: {
             baseUrl: $('#remoteserver').val(),
             appId: $('#remoteappid').val(),
